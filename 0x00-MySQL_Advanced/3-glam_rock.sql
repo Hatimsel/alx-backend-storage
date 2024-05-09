@@ -6,4 +6,4 @@ SELECT band_name,
 		WHEN split THEN split - formed
 		ELSE 2020 - formed
 	END AS lifespan
-FROM metal_bands WHERE style = "Glam rock";
+FROM metal_bands WHERE style = "Glam rock" ORDER BY lifespan DESC;
