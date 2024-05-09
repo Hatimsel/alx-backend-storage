@@ -4,6 +4,6 @@
 SELECT band_name,
 	CASE
 		WHEN split THEN split - formed
-		ELSE 2022 - formed
+		ELSE 2020 - formed
 	END AS lifespan
 FROM metal_bands WHERE style = "Glam rock";
