@@ -36,6 +36,6 @@ if __name__ == "__main__":
     for i in range(len(methods)):
         print(f"\tmethod {methods[i]}: {count[i]}")
     print(f"{status_check} status check")
-    print("IPs")
+    print("IPs:")
     for ip in ips:
         print(f"\t{ip.get('_id')}: {ip.get('count')}")
