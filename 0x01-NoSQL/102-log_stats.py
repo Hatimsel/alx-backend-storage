@@ -24,9 +24,12 @@ if __name__ == "__main__":
             },
             {
                 "$sort": {"count": -1}
+            },
+            {
+                "$limit": 10
             }
         ]
-    ips = nginx.aggregate(pipeline)
+    ips = list(nginx.aggregate(pipeline))
 
     print(f"{num_of_logs} logs")
     print("Methods:")
@@ -34,9 +37,5 @@ if __name__ == "__main__":
         print(f"\tmethod {methods[i]}: {count[i]}")
     print(f"{status_check} status check")
     print("IPs")
-    count = 0
     for ip in ips:
-        if count == 10:
-            break
         print(f"\t{ip.get('_id')}: {ip.get('count')}")
-        count += 1
