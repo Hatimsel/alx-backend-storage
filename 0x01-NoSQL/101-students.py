@@ -3,6 +3,8 @@
 
 
 def top_students(mongo_collection):
+    """Takes a db collection
+    Returns students sorted by average score"""
     pipeline = [
             {
                 "$unwind": "$topics"
