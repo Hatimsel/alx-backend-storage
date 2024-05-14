@@ -12,7 +12,7 @@ num_of_logs = nginx.count_documents({})
 methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 count = [nginx.count_documents({"method": method}) for method in methods]
 
-status_check = nginx.count_documents({"path": "/status"})
+status_check = nginx.count_documents({"path": "/status", "method": "GET"})
 
 print(f"{num_of_logs} logs")
 print("Methods:")
