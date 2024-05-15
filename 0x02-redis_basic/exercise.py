@@ -88,3 +88,12 @@ class Cache:
             "inputs": [i.decode('utf-8') for i in inputs],
             "outputs": [o.decode('utf-8') for o in outputs]
         }
+
+    def replay(self, fn):
+        """"""
+        history = self.get_history(fn)
+        inputs = history['inputs']
+        outputs = history['outputs']
+        print(f"{fn} was called {len(inputs)} times:")
+        for i, (input, output) in enumerate(zip(inputs, outputs)):
+            print(f"{fn}(*{input}) -> {output}")
