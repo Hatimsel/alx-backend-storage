@@ -72,14 +72,14 @@ class Cache:
         return int(self.get(key))
 
     def get_count(self, fn):
-        """"""
+        """Counts the calls of a method"""
         count = self._redis.get(fn)
         if count:
             return int(count)
         return 0
 
     def get_history(self, fn):
-        """"""
+        """Retrieves the ins and out history of a method"""
         input_key = f"{fn}:inputs"
         output_key = f"{fn}:outputs"
         inputs = self._redis.lrange(input_key, 0, -1)
@@ -90,7 +90,8 @@ class Cache:
         }
 
     def replay(self, fn):
-        """"""
+        """Retrieves and prints the hsitory of ins and outs
+        of a method"""
         history = self.get_history(fn)
         inputs = history['inputs']
         outputs = history['outputs']
