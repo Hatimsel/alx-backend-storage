@@ -9,6 +9,7 @@ from typing import Union, Callable
 
 
 def count_calls(method: Callable) -> Callable:
+    """Counts how many times the method is called"""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         key = method.__qualname__
@@ -19,6 +20,7 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
+    """Stores the ins and outs of the method when called"""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         input_key = f"{method.__qualname__}:inputs"
@@ -79,23 +81,35 @@ class Cache:
             return int(count)
         return 0
 
-    def get_history(self, fn):
-        """Retrieves the ins and out history of a method"""
-        input_key = f"{fn}:inputs"
-        output_key = f"{fn}:outputs"
-        inputs = self._redis.lrange(input_key, 0, -1)
-        outputs = self._redis.lrange(output_key, 0, -1)
-        return {
-            "inputs": [i.decode('utf-8') for i in inputs],
-            "outputs": [o.decode('utf-8') for o in outputs]
-        }
+    def replay(self, method):
+        key = method.__qualname__
+        num_of_calls = self.get_int(key)
 
-    def replay(self, fn):
-        """Retrieves and prints the hsitory of ins and outs
-        of a method"""
-        history = self.get_history(fn)
-        inputs = history['inputs']
-        outputs = history['outputs']
-        print(f"{fn} was called {len(inputs)} times:")
-        for i, (input, output) in enumerate(zip(inputs, outputs)):
-            print(f"{fn}(*{input}) -> {output}")
+        inputs = self._redis.lrange(f"{key}:inputs", 0, -1)
+        outputs = self._redis.lrange(f"{key}:outputs", 0, -1)
+
+        print(f"{key} was called {num_of_calls} times:")
+
+        for i, o in zip(inputs, outputs):
+            print("{}(*{}) -> {}".format(key, i, o))
+
+    # def get_history(self, fn):
+    #     """Retrieves the ins and out history of a method"""
+    #     input_key = f"{fn}:inputs"
+    #     output_key = f"{fn}:outputs"
+    #     inputs = self._redis.lrange(input_key, 0, -1)
+    #     outputs = self._redis.lrange(output_key, 0, -1)
+    #     return {
+    #         "inputs": [i.decode('utf-8') for i in inputs],
+    #         "outputs": [o.decode('utf-8') for o in outputs]
+    #     }
+
+    # def replay(self, fn):
+    #     """Retrieves and prints the hsitory of ins and outs
+    #     of a method"""
+    #     history = self.get_history(fn)
+    #     inputs = history['inputs']
+    #     outputs = history['outputs']
+    #     print(f"{fn} was called {len(inputs)} times:")
+    #     for i, (input, output) in enumerate(zip(inputs, outputs)):
+    #         print(f"{fn}(*{input}) -> {output}")
