@@ -4,15 +4,16 @@ Writing strings to redis
 """
 import redis
 import uuid
-from typing import Union
 from functools import wraps
+from typing import Union, Callable
 
 
-def count_calls(method):
+def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        method_name = method.__qualname__
-        self._redis.incr(method_name)
+        key = method.__qualname__
+        self._redis.incr(key)
+
         return method(self, *args, **kwargs)
     return wrapper
 
