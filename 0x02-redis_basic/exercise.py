@@ -9,9 +9,13 @@ from typing import Union, Callable
 
 
 def count_calls(method: Callable) -> Callable:
-    """Counts how many times the method is called"""
+    """
+    Counts how many times the method is called
+    """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """Wrapps the method
+        """
         key = method.__qualname__
         self._redis.incr(key)
 
@@ -23,6 +27,8 @@ def call_history(method: Callable) -> Callable:
     """Stores the ins and outs of the method when called"""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """Wrapps the method
+        """
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
 
@@ -82,6 +88,8 @@ class Cache:
         return 0
 
     def replay(self, method):
+        """Displays the history of calls of the method
+        """
         key = method.__qualname__
         num_of_calls = self.get_int(key)
 
